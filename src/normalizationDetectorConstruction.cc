@@ -1242,8 +1242,8 @@ G4VPhysicalVolume* normalizationDetectorConstruction::Construct()
 //   G4double phantom_z = 3.5*mm;
 //   G4double heads_distance = 200*mm;
   
-  G4int nCrystalsX = 48;
-  G4int nCrystalsY = 64;
+  G4int nCrystalsX = 64;
+  G4int nCrystalsY = 48;
   
   G4int nCrystalsXperSUB = 2;
   G4int nCrystalsYperSUB = 8;
@@ -1260,8 +1260,8 @@ G4VPhysicalVolume* normalizationDetectorConstruction::Construct()
 //   G4double crystalPitchYperSUB = 2.3 * mm;
   
   
-  headx = (nCrystalsX) * (fCrystal_x  + xCryGap) ;
-  heady = (nCrystalsY) * (fCrystal_y  + yCryGap) ;
+  headx = 180.0 * mm ;
+  heady = 160.0 * mm ;
 //   headx = crystalPitchX * (nCrystalsX);
 //   heady = crystalPitchY * (nCrystalsY);
 //   headz = fCrystal_z;
@@ -1345,14 +1345,136 @@ G4VPhysicalVolume* normalizationDetectorConstruction::Construct()
 //     yAPDpos[i] = (0.5*yAPDgap + 0.5*yAPD)*((i*2)+1) ;
 //   }
   
-  G4double xCryPos[48];
-  G4double yCryPos[64];
+  G4double xCryPos[64] = {
+    
+    0,
+2.3  ,
+4.6  ,
+6.9  ,
+9.2  ,
+11.5 ,
+13.8 ,
+16.1 ,
+21.9 ,
+24.2 ,
+26.5 ,
+28.8 ,
+31.1 ,
+33.4 ,
+35.7 ,
+38   ,
+44.5 ,
+46.8 ,
+49.1 ,
+51.4 ,
+53.7 ,
+56   ,
+58.3 ,
+60.6 ,
+66.4 ,
+68.7 ,
+71   ,
+73.3 ,
+75.6 ,
+77.9 ,
+80.2 ,
+82.5 ,
+89   ,
+91.3 ,
+93.6 ,
+95.9 ,
+98.2 ,
+100.5,
+102.8,
+105.1,
+110.9,
+113.2,
+115.5,
+117.8,
+120.1,
+122.4,
+124.7,
+127  ,
+133.5,
+135.8,
+138.1,
+140.4,
+142.7,
+145  ,
+147.3,
+149.6,
+155.4,
+157.7,
+160  ,
+162.3,
+164.6,
+166.9,
+169.2,
+171.5    
+  };
   
   
-  for(int i = 0 ; i < 48 ; i ++)
-  {
-    xCryPos[i] = (i+1) * (fCrystal_x / 2.0 + xCryGap/ 2.0);
-  }
+  
+  G4double yCryPos[48] = {
+   0 ,
+2.3  ,
+4.9  ,
+7.2  ,
+13   ,
+15.3 ,
+17.9 ,
+20.2 ,
+26   ,
+28.3 ,
+30.9 ,
+33.2 ,
+39   ,
+41.3 ,
+43.9 ,
+46.2 ,
+52   ,
+54.3 ,
+56.9 ,
+59.2 ,
+65   ,
+67.3 ,
+69.9 ,
+72.2 ,
+78   ,
+80.3 ,
+82.9 ,
+85.2 ,
+91   ,
+93.3 ,
+95.9 ,
+98.2 ,
+104  ,
+106.3,
+108.9,
+111.2,
+117  ,
+119.3,
+121.9,
+124.2,
+130  ,
+132.3,
+134.9,
+137.2,
+143  ,
+145.3,
+147.9,
+150.2
+  };
+  
+  
+  G4double xShift = 171.5 / 2.0;
+  G4double yShift = 150.2 / 2.0;
+  
+  
+//   for(int i = 0 ; i < 48 ; i ++)
+//   {
+//     xCryPos[i] = (i+1) * (fCrystal_x / 2.0 + xCryGap/ 2.0);
+//   }
   
   
   G4int crystalNumber = 0;
@@ -1393,7 +1515,11 @@ G4VPhysicalVolume* normalizationDetectorConstruction::Construct()
       name.str("");
 //       name << i << "_" << j;
       name << crystalNumber;
-      crystal_phys_dh0[i][j] = new G4PVPlacement(0,G4ThreeVector((fCrystal_x  + xCryGap)/2.0 + (i) * (fCrystal_x  + xCryGap) - (headx/2.0)  , (fCrystal_y  + yCryGap)/2.0 +(j) * (fCrystal_y  + yCryGap) - (heady/2.0) ,0.),crystal_log_dh0[i][j],name.str().c_str(),DH0_log,false,fCheckOverlaps);
+      //standard way
+//       crystal_phys_dh0[i][j] = new G4PVPlacement(0,G4ThreeVector((fCrystal_x  + xCryGap)/2.0 + (i) * (fCrystal_x  + xCryGap) - (headx/2.0)  , (fCrystal_y  + yCryGap)/2.0 +(j) * (fCrystal_y  + yCryGap) - (heady/2.0) ,0.),crystal_log_dh0[i][j],name.str().c_str(),DH0_log,false,fCheckOverlaps);
+      //positions from the x and y arrays
+      crystal_phys_dh0[i][j] = new G4PVPlacement(0,G4ThreeVector( xCryPos[i] - xShift  , yCryPos[j] - yShift ,0.),crystal_log_dh0[i][j],name.str().c_str(),DH0_log,false,fCheckOverlaps);
+      
       crystalNumber++;
     } 
   }
@@ -1444,7 +1570,8 @@ G4VPhysicalVolume* normalizationDetectorConstruction::Construct()
       name.str("");
 //       name << i << "_" << j;
       name << crystalNumber;
-      crystal_phys_dh1[i][j] = new G4PVPlacement(0,G4ThreeVector((fCrystal_x  + xCryGap)/2.0 + (i) * (fCrystal_x  + xCryGap) - (headx/2.0)  , (fCrystal_y  + yCryGap)/2.0 +(j) * (fCrystal_y  + yCryGap) - (heady/2.0) ,0.),crystal_log_dh1[i][j],name.str().c_str(),DH1_log,false,fCheckOverlaps);
+//       crystal_phys_dh1[i][j] = new G4PVPlacement(0,G4ThreeVector((fCrystal_x  + xCryGap)/2.0 + (i) * (fCrystal_x  + xCryGap) - (headx/2.0)  , (fCrystal_y  + yCryGap)/2.0 +(j) * (fCrystal_y  + yCryGap) - (heady/2.0) ,0.),crystal_log_dh1[i][j],name.str().c_str(),DH1_log,false,fCheckOverlaps);
+      crystal_phys_dh1[i][j] = new G4PVPlacement(0,G4ThreeVector( xCryPos[i] - xShift  , yCryPos[j] - yShift ,0.),crystal_log_dh1[i][j],name.str().c_str(),DH1_log,false,fCheckOverlaps);
       crystalNumber++;
     } 
   }
