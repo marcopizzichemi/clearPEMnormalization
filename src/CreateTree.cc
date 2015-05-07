@@ -47,7 +47,7 @@ CreateTree::CreateTree(TString name/*, int x, int y, int z, int k*/)
   this->GetTree()->Branch("totalEnergyDeposited",&this->totalEnergyDeposited,"totalEnergyDeposited/F");
   this->GetTree()->Branch("NumOptPhotons",&this->NumOptPhotons,"NumOptPhotons/I");
   this->GetTree()->Branch("NumCherenkovPhotons",&this->NumCherenkovPhotons,"NumCherenkovPhotons/I");
-  
+  this->GetTree()->Branch("FirstIsCoincidenceCandidate",&this->FirstIsCoincidenceCandidate,"FirstIsCoincidenceCandidate/I");
   
   pEnergyDeposited = &EnergyDeposited;
   this->GetTree()->Branch("EnergyDeposited","std::vector<float>",&pEnergyDeposited);
@@ -148,6 +148,7 @@ void CreateTree::Clear()
   EventTag = 0;
   NumCherenkovPhotons=0;
   totalEnergyDeposited=0;
+  FirstIsCoincidenceCandidate=0;
   EnergyDeposited.clear();
   Crystal.clear();
   

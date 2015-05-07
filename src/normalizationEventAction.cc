@@ -65,27 +65,44 @@ void normalizationEventAction::BeginOfEventAction(const G4Event* event)
   G4cout << "//              Event Number " << eventID		<< G4endl;
   G4cout << "//***********************************************//" << G4endl;
 
-  
+  //store the info that would be destroied by the clear command, so you can use it immediately later
   Int_t run = CreateTree::Instance()->Run;
-  
   long int eventTag = CreateTree::Instance()->EventTag;
   long int seed = CreateTree::Instance()->Seed;
+  int FirstIsCoincidenceCandidate = CreateTree::Instance()->FirstIsCoincidenceCandidate;
+  
+  //clear the create tree
   CreateTree::Instance()->Clear();
+  
+  //these remained stored in the same way
   CreateTree::Instance()->Seed = seed;
   CreateTree::Instance()->Run = run;
+  //store the event number
   CreateTree::Instance()->Event = event->GetEventID();
-  if(eventID % 2 == 0)
+  //store the event tag (pairs)
+  if(eventID % 2 == 0)  //this are the "first" events in the pairs
   {
-    if(eventID != 0)
-      CreateTree::Instance()->EventTag = eventTag+1;
+    if(eventID != 0)   // if it's not the very first event
+      CreateTree::Instance()->EventTag = eventTag+1; // increase the event tag +1
     else 
-      CreateTree::Instance()->EventTag = 0;
+      CreateTree::Instance()->EventTag = 0; // otherwise start from 0
   }
   else 
   {
-    CreateTree::Instance()->EventTag = eventTag;
+    CreateTree::Instance()->EventTag = eventTag; // so if it's a "second" event of the pair, keep the same event tag
   }
   
+  //now in the same way, store the crucial info if the first was or not a candidate
+  if(eventID % 2 == 0)  //this are the "first" events in the pairs
+  {
+    // so before entering the event, they are candidate by definition
+    CreateTree::Instance()->FirstIsCoincidenceCandidate = 0;
+  }
+  else //for the second ones, they keep the FirstIsCoincidenceCandidate to 0 only if the one before was actually a candidate
+  {
+    CreateTree::Instance()->FirstIsCoincidenceCandidate = FirstIsCoincidenceCandidate;
+  }
+  //in this way, we will generate always the first gamma, but the second will be generated only if the first was a candidate
 
 }
 
@@ -95,6 +112,10 @@ void normalizationEventAction::EndOfEventAction(const G4Event* event)
 {
   // Accumulate statistics
   //
+  if(CreateTree::Instance()->totalEnergyDeposited > 0.5)
+    CreateTree::Instance()->FirstIsCoincidenceCandidate = 0;
+  else
+    CreateTree::Instance()->FirstIsCoincidenceCandidate = 1;
   CreateTree::Instance()->Fill();
   //CreateTree::Instance()->Clear();
   

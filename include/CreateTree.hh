@@ -54,6 +54,7 @@ class CreateTree
   Float_t             enPerCrystal[6144]; 
   
   long int            EventTag;
+  int                 FirstIsCoincidenceCandidate;
   
   Short_t*            DetectorHit;          
 //   int            DetectorHit[16];
