@@ -1,4 +1,19 @@
+// compile with
+
 // g++ -o ../analysis-bin/sensitivity sensitivity.cpp `root-config --cflags --glibs`
+
+// so you need to have a ../analysis-bin/ folder ready (this way the binary is not in the folder watched by git)
+
+// this code transforms the output of the normalization "simple" simulation into the elm2 format 
+// that is usually produced by the detector (and that should be fed to norm_total_gen)
+// it will produce only a listmode file with true coincidences
+
+// the idea is to assign x and y coordinates as the coordinates of the crystal identified, while z is the 
+// weighted average of the real z information given by the simulation data (weighted on energy deposited)
+// being there no detector in this simulation, we can't take the DOI from anywhere else...
+
+
+
 #include "TROOT.h"
 #include "TStyle.h"
 #include "TSystem.h"
@@ -35,6 +50,27 @@
 #include <stdio.h> 
 #include <unistd.h>
 #include <cmath> 
+
+//declares the struct of events
+struct EventFormat 
+{
+  double ts;				// time of the event, in seconds. if i'm not mistaken is the absolute machine time in seconds 
+  u_int8_t random;                      // set probably at the level of acq, says if the event is random (when it's value is 1)
+  float d;                              // distance between the heads, fixed to the head distance value... 
+  float yozRot;		                // rotation of the heads 
+  float x1;                             // x coordinate of the event, for detector 1		
+  float y1;                             // y coordinate of the event, for detector 1
+  float z1;                             // z coordinate of the event, for detector 1
+  float e1;                             // energy deposited in detector 1
+  u_int8_t n1;                          // some check done probably at the level of acq, it's 1 if the event is ok, otherwise is not ok
+  float x2;                             // x coordinate of the event, for detector 2
+  float y2;                             // y coordinate of the event, for detector 2
+  float z2;                             // z coordinate of the event, for detector 2
+  float e2;                             // energy deposited in detector 2
+  u_int8_t n2;                          // some check done probably at the level of acq, it's 1 if the event is ok, otherwise is not ok
+  float dt;                             // delta time between event in detector 1 and event in detector 2 
+} __attribute__((__packed__));     
+
 
 
 int main (int argc, char** argv)
@@ -93,6 +129,11 @@ int main (int argc, char** argv)
   float avgX,avgX1,avgY,avgY1,avgZ,avgZ1;
   float sX0,sX1,sY0,sY1;
   
+  
+  
+  
+  
+  
   long int counter = 0;
   long int nEntries = tree->GetEntries();
   std::cout << "nEntries = " << nEntries << std::endl;
@@ -129,6 +170,7 @@ int main (int argc, char** argv)
     
     std::vector<int> cryIDs;
     std::vector<double> energy;
+    std::vector<double> doi;
     
     //check which crystals have energy deposition
     for(int j = 0;  j < pCry->size() ; j++) 
@@ -147,15 +189,30 @@ int main (int argc, char** argv)
     }
     
     //for each crystal ID, sum the energy deposited into it
+    //calculate the weighted average z position at the same time for each crystal ID
     for(int j = 0;  j < cryIDs.size() ; j++) 
     {
       energy.push_back(0);
+      doi.push_back(0);
       for(int k = 0 ; k < pCry->size() ; k++)
       {
 	if(pCry->at(k) == cryIDs.at(j)) //if the energy was deposited in that crystal
+	{
 	  energy[j] += pEn->at(k);
+	  doi[j] += pEn->at(k)*pPosZEnDep->at(k);
+	}
       }
     }
+    
+    for(int j = 0;  j < energy.size() ; j++) 
+    {
+      doi[j] = doi[j]/energy[j];
+    }
+    
+    
+    
+    
+    
     
 //     for(int j = 0;  j < pCry->size() ; j++) 
 //     {
@@ -183,26 +240,28 @@ int main (int argc, char** argv)
 //     
     int cry1;
     bool coinc1 = false; //flag "i'm a candidate for coincidence"
+    float energy1;
+    float doi1;
     
     for(int j = 0 ; j < cryIDs.size() ; j++)
     {
       if(energy.at(j) > 0.5) //cannot really happen for 2 crystals, given a source of 511kev and gammas been taken one by one...
       {
 	cry1 = cryIDs.at(j);
+	energy1 = (float) energy.at(j);
+	doi1 = (float) doi.at(j);
 	coinc1 = true;
       }
     }
     
     
-    
-    
-    
+    //second event
     tree->GetEvent(i+1);
     
     
     cryIDs.clear();
     energy.clear();
-    
+    doi.clear()
     
     //check which crystals have energy deposition, sum the energy deposited
     for(int j = 0;  j < pCry->size() ; j++) 
@@ -223,12 +282,22 @@ int main (int argc, char** argv)
     for(int j = 0;  j < cryIDs.size() ; j++) 
     {
       energy.push_back(0);
+      doi.push_back(0);
       for(int k = 0 ; k < pCry->size() ; k++)
       {
 	if(pCry->at(k) == cryIDs.at(j))
+	{
 	  energy[j] += pEn->at(k);
+	  doi[j] += pEn->at(k)*pPosZEnDep->at(k);
+	}
       }
     }
+    
+    for(int j = 0;  j < energy.size() ; j++) 
+    {
+      doi[j] = doi[j]/energy[j];
+    }
+    
     
 //     for(int j = 0;  j < pCry->size() ; j++) 
 //     {
@@ -256,12 +325,16 @@ int main (int argc, char** argv)
     
     int cry2;
     bool coinc2 = false;
+    float energy2;
+    float doi2;
     
     for(int j = 0 ; j < cryIDs.size() ; j++)
     {
       if(energy.at(j) > 0.5)
       {
 	cry2 = cryIDs.at(j);
+	energy2 = (float) energy.at(j);
+	doi2 = (float) doi.at(j);
 	coinc2 = true;
       }
     }
