@@ -27,7 +27,8 @@ CreateTree::CreateTree(TString name)
   this->GetTree()->Branch("Run",&this->Run,"Run/I");
   this->GetTree()->Branch("Event",&this->Event,"Event/I");
   this->GetTree()->Branch("GammaParity",&this->GammaParity,"GammaParity/I");
-
+  this->GetTree()->Branch("DoEvent",&this->DoEvent,"DoEvent/I");
+  
   std::stringstream snames;
   
   //branches for the first gamma
@@ -101,6 +102,7 @@ void CreateTree::Clear()
   Run=0;
   Event=0;
   GammaParity=0; //so next one will start from first gamma
+  DoEvent = 0;
   
   First_totalEnergyDeposited=0;
   First_EnergyDeposited.clear();

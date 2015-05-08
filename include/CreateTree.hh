@@ -42,6 +42,7 @@ class CreateTree
   Int_t               Run;
   Int_t               Event;
   Int_t               GammaParity; // 0 if it's First gamma, 1 if it's Second
+  Int_t               DoEvent;     // 0 = do the simulation on this event, 1 = skip it (because this is a second and the first was not a candidate)
   
   //variables for first photon 
   Float_t             First_totalEnergyDeposited;

@@ -84,10 +84,12 @@ void normalizationEventAction::BeginOfEventAction(const G4Event* event)
   if(eventID % 2 == 0)  //this are the "first" events in the pairs
   {
     CreateTree::Instance()->GammaParity = 0;
+    CreateTree::Instance()->DoEvent = 0; //always do the simulation for the first events
   }
   else 
   {
     CreateTree::Instance()->GammaParity = 1;
+    // leave the DoEvent flag set as it has been set by the end of previous event
   }
 
 }
@@ -103,7 +105,10 @@ void normalizationEventAction::EndOfEventAction(const G4Event* event)
   
   if(CreateTree::Instance()->GammaParity == 0) //it's first
   {
-    // do nothing, proceed to next gamma (second)
+    if(CreateTree::Instance()->First_totalEnergyDeposited < 0.5) // so if the First gamma is not candidate
+    {
+      CreateTree::Instance()->DoEvent = 1; //tell to the primary generator not to generate the gamma in the next event
+    }
   }
   else  //it's second
   {

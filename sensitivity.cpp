@@ -99,19 +99,23 @@ int main (int argc, char** argv)
   long int Seed;
   int Run;
   int Event;
-  long int EventTag;
-  float totalEnergyDeposited;
-  int NumOptPhotons;
-  int NumCherenkovPhotons;
+  int GammaParity;
+  int DoEvent;
+  //long int EventTag;
+  
+  //int NumOptPhotons;
+  //int NumCherenkovPhotons;
   // second part, some vectors carrying information related to the children of the original gamma
   // if the gamma has deposited energy, this could have happened in one shot or in many different steps
   // so each characteristic is recorded as an entry in the relative std::vector below
   // because of the way TTree are done, these info have to be retreived via pointers
-  std::vector<float> *pEn = 0;              // energy deposited in this step
-  std::vector<int>   *pCry = 0;             // crystal where the energy was deposited (i.e. the crystal ID, from 0 to 6143, in both the detectors)
-  std::vector<float> *pPosXEnDep = 0;       // global x position of this energy deposition
-  std::vector<float> *pPosYEnDep = 0;       // global y position of this energy deposition
-  std::vector<float> *pPosZEnDep = 0;       // global z position of this energy deposition
+  
+  float First_totalEnergyDeposited;
+  std::vector<float> *First_pEn = 0;              // energy deposited in this step
+  std::vector<int>   *First_pCry = 0;             // crystal where the energy was deposited (i.e. the crystal ID, from 0 to 6143, in both the detectors)
+  std::vector<float> *First_pPosXEnDep = 0;       // global x position of this energy deposition
+  std::vector<float> *First_pPosYEnDep = 0;       // global y position of this energy deposition
+  std::vector<float> *First_pPosZEnDep = 0;       // global z position of this energy deposition
   // therefore, if for example the energy of this gamma was deposited in, say, two crystals (ex. 34 and 46), and in 3 different position of the first 
   // crystal and 2 positions in the second, this event will have the above mentioned vectors that would look like follows
   
@@ -125,19 +129,37 @@ int main (int argc, char** argv)
   // then next event could have energy deposited in any other number of steps, so the length of the std::vectors will be different
   // (which is why we use std::vectors in the first place)
   
+  float Second_totalEnergyDeposited;
+  std::vector<float> *Second_pEn = 0;              // energy deposited in this step
+  std::vector<int>   *Second_pCry = 0;             // crystal where the energy was deposited (i.e. the crystal ID, from 0 to 6143, in both the detectors)
+  std::vector<float> *Second_pPosXEnDep = 0;       // global x position of this energy deposition
+  std::vector<float> *Second_pPosYEnDep = 0;       // global y position of this energy deposition
+  std::vector<float> *Second_pPosZEnDep = 0;       // global z position of this energy deposition
+  
+  
+  
+  
   //set branch addresses
   tree->SetBranchAddress("Seed",&Seed);
   tree->SetBranchAddress("Run",&Run);
   tree->SetBranchAddress("Event",&Event);
-  tree->SetBranchAddress("EventTag",&EventTag);
-  tree->SetBranchAddress("totalEnergyDeposited",&totalEnergyDeposited);
-  tree->SetBranchAddress("NumOptPhotons",&NumOptPhotons);
-  tree->SetBranchAddress("NumCherenkovPhotons",&NumCherenkovPhotons);
-  tree->SetBranchAddress("EnergyDeposited",&pEn);
-  tree->SetBranchAddress("Crystal",&pCry);
-  tree->SetBranchAddress("PosXEnDep",&pPosXEnDep);
-  tree->SetBranchAddress("PosYEnDep",&pPosYEnDep);
-  tree->SetBranchAddress("PosZEnDep",&pPosZEnDep);
+  tree->SetBranchAddress("GammaParity",&GammaParity);
+  tree->SetBranchAddress("DoEvent",&DoEvent);
+  
+  tree->SetBranchAddress("First_totalEnergyDeposited",&First_totalEnergyDeposited);
+  tree->SetBranchAddress("First_EnergyDeposited",&First_pEn);
+  tree->SetBranchAddress("First_Crystal",&First_pCry);
+  tree->SetBranchAddress("First_PosXEnDep",&First_pPosXEnDep);
+  tree->SetBranchAddress("First_PosYEnDep",&First_pPosYEnDep);
+  tree->SetBranchAddress("First_PosZEnDep",&First_pPosZEnDep);
+  
+  tree->SetBranchAddress("Second_totalEnergyDeposited",&Second_totalEnergyDeposited);
+  tree->SetBranchAddress("Second_EnergyDeposited",&Second_pEn);
+  tree->SetBranchAddress("Second_Crystal",&Second_pCry);
+  tree->SetBranchAddress("Second_PosXEnDep",&Second_pPosXEnDep);
+  tree->SetBranchAddress("Second_PosYEnDep",&Second_pPosYEnDep);
+  tree->SetBranchAddress("Second_PosZEnDep",&Second_pPosZEnDep);
+  
   
   //some histograms that will be plotted at the same time...
   TH2F *projectionSlice = new TH2F("projection","projection", 64, -90, 90, 48, -80, 80);
@@ -183,9 +205,10 @@ int main (int argc, char** argv)
   //   float minX,minY;
   
   //fake coincidence sorting
-  for(int i = 0; i < /*nEntries*/ /* TEMPORARY LIMITATION FOR CHECKING THE PROGRAM */ 100000 ; i=i+2) //read the event 2 by 2, as they are coupled like this (gamma and back to back gamma)
+  for(int i = 0; i < nEntries ; i++) 
   { 
-    counter=counter+2;
+    counter++; 
+    tree->GetEvent(i);//get the event
     
     EventFormat fe; // prepare the output stucture 
     //global values
@@ -199,14 +222,14 @@ int main (int argc, char** argv)
     
     //FIRST GAMMA SHOT BY THE SIMULATION 
     //get the event data saved in the input Root TTree
-    tree->GetEvent(i); 
+     
     //prepare some useful vector
     std::vector<int> cryIDs;              //vector of the IDs of crystals where, in this event (= because of this gamma), there has been energy deposition
     std::vector<float> energy;            //vector of the energies deposited in each crystal
     std::vector<float> avgX,avgY,avgZ;    //vector of the average energy deposition position
     
     //check which crystals have energy deposition
-    for(int j = 0;  j < pCry->size() ; j++) //run on the length of the crystal ID std::vector, which is the same length of all the other std::vectors (see above)
+    for(int j = 0;  j < First_pCry->size() ; j++) //run on the length of the crystal ID std::vector, which is the same length of all the other std::vectors (see above)
     {
       // now the vector pCry has as many elements as were the energy deposition "events", but most likely means it contains repetitions of some IDs 
       // whenever energy was deposited more than once per crystal
@@ -214,13 +237,13 @@ int main (int argc, char** argv)
       bool found = false;
       for(int k = 0 ; k < cryIDs.size() ; k++) //check if this crystal ID was already added to the cryIDs vector (the first time, j=0, of course the program will not enter this cycle)
       {
-	if(pCry->at(j) == cryIDs.at(k))
+	if(First_pCry->at(j) == cryIDs.at(k))
 	{ 
 	  found = true;
 	}
       }
       if(!found) //if not, add it (and the first time, j=0, this will always be the case)
-	cryIDs.push_back(pCry->at(j));
+	cryIDs.push_back(First_pCry->at(j));
     }
     
     //for each crystal ID found, sum the energy deposited into that crystal
@@ -233,14 +256,14 @@ int main (int argc, char** argv)
       avgY.push_back(0);
       avgZ.push_back(0);
       //now for this ID, run on all the entries of the input std::vectors (which means on each deposition event)...
-      for(int k = 0 ; k < pCry->size() ; k++)
+      for(int k = 0 ; k < First_pCry->size() ; k++)
       {
-	if(pCry->at(k) == cryIDs.at(j)) //...and if the energy was deposited in this crystal...
+	if(First_pCry->at(k) == cryIDs.at(j)) //...and if the energy was deposited in this crystal...
 	{
-	  energy[j] += pEn->at(k);                      // ... sum it to the total energy deposited in this crystal...
-	  avgX[j]   += pEn->at(k)*pPosXEnDep->at(k);    // ... update the weighted average position
-	  avgY[j]   += pEn->at(k)*pPosYEnDep->at(k);    // ... update the weighted average position
-	  avgZ[j]   += pEn->at(k)*pPosZEnDep->at(k);    // ... update the weighted average position
+	  energy[j] += First_pEn->at(k);                      // ... sum it to the total energy deposited in this crystal...
+	  avgX[j]   += First_pEn->at(k)*First_pPosXEnDep->at(k);    // ... update the weighted average position
+	  avgY[j]   += First_pEn->at(k)*First_pPosYEnDep->at(k);    // ... update the weighted average position
+	  avgZ[j]   += First_pEn->at(k)*First_pPosZEnDep->at(k);    // ... update the weighted average position
 	}
       }
     }
@@ -298,8 +321,6 @@ int main (int argc, char** argv)
     }
     
     
-    //SECOND EVENT 
-    tree->GetEvent(i+1);
     
     if(coinc1 == true) // if the first event was not a good candidate, it makes no sense to check the second in this condition
     {
@@ -313,7 +334,7 @@ int main (int argc, char** argv)
       //then do exactly as before...
       
       //check which crystals have energy deposition
-      for(int j = 0;  j < pCry->size() ; j++) //run on the length of the crystal ID std::vector, which is the same length of all the other std::vectors (see above)
+      for(int j = 0;  j < Second_pCry->size() ; j++) //run on the length of the crystal ID std::vector, which is the same length of all the other std::vectors (see above)
       {
 	// now the vector pCry has as many elements as were the energy deposition "events", but most likely means it contains repetitions of some IDs 
 	// whenever energy was deposited more than once per crystal
@@ -321,13 +342,13 @@ int main (int argc, char** argv)
 	bool found = false;
 	for(int k = 0 ; k < cryIDs.size() ; k++) //check if this crystal ID was already added to the cryIDs vector (the first time, j=0, of course the program will not enter this cycle)
 	{
-	  if(pCry->at(j) == cryIDs.at(k))
+	  if(Second_pCry->at(j) == cryIDs.at(k))
 	  { 
 	    found = true;
 	  }
 	}
 	if(!found) //if not, add it (and the first time, j=0, this will always be the case)
-	  cryIDs.push_back(pCry->at(j));
+	  cryIDs.push_back(Second_pCry->at(j));
       }
       
       //for each crystal ID found, sum the energy deposited into that crystal
@@ -340,14 +361,14 @@ int main (int argc, char** argv)
 	avgY.push_back(0);
 	avgZ.push_back(0);
 	//now for this ID, run on all the entries of the input std::vectors (which means on each deposition event)...
-	for(int k = 0 ; k < pCry->size() ; k++)
+	for(int k = 0 ; k < Second_pCry->size() ; k++)
 	{
-	  if(pCry->at(k) == cryIDs.at(j)) //...and if the energy was deposited in this crystal...
+	  if(Second_pCry->at(k) == cryIDs.at(j)) //...and if the energy was deposited in this crystal...
 	  {
-	    energy[j] += pEn->at(k);                      // ... sum it to the total energy deposited in this crystal...
-	    avgX[j]   += pEn->at(k)*pPosXEnDep->at(k);    // ... update the weighted average position
-	    avgY[j]   += pEn->at(k)*pPosYEnDep->at(k);    // ... update the weighted average position
-	    avgZ[j]   += pEn->at(k)*pPosZEnDep->at(k);    // ... update the weighted average position
+	    energy[j] += Second_pEn->at(k);                      // ... sum it to the total energy deposited in this crystal...
+	    avgX[j]   += Second_pEn->at(k)*Second_pPosXEnDep->at(k);    // ... update the weighted average position
+	    avgY[j]   += Second_pEn->at(k)*Second_pPosYEnDep->at(k);    // ... update the weighted average position
+	    avgZ[j]   += Second_pEn->at(k)*Second_pPosZEnDep->at(k);    // ... update the weighted average position
 	  }
 	}
       }

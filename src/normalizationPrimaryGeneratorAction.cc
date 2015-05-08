@@ -38,6 +38,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
+#include "CreateTree.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -208,7 +209,11 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   
   
 //   }
-  fParticleGun->GeneratePrimaryVertex(anEvent);
+  if(CreateTree::Instance()->DoEvent == 0) //generate the gamma only if the flag is 0, which will always be the case for First gammas, while for 
+    //Second gammas depends on the energy deposited by the First (it makes no sense to simulate the second gamma if anyway this pair would not do a coincidence)
+  {
+    fParticleGun->GeneratePrimaryVertex(anEvent);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
