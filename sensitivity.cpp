@@ -691,11 +691,11 @@ int main (int argc, char** argv)
   //   ofs.close();
   
   
-  std::string effFile = "eff_" + std::string(argv[1]);
-  TFile* fOut = new TFile(effFile.c_str(),"recreate");
-  efficiency_dh0->Write();
-  efficiency_dh1->Write();
-  fOut->Close();
+//   std::string effFile = "eff_" + std::string(argv[1]);
+//   TFile* fOut = new TFile(effFile.c_str(),"recreate");
+//   efficiency_dh0->Write();
+//   efficiency_dh1->Write();
+//   fOut->Close();
   
   //   std::string outFile = "coincidence_" + std::string(argv[1]);
   //   TFile* fOut = new TFile(outFile.c_str(),"recreate");

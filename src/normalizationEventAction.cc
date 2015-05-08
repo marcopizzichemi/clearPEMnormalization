@@ -62,8 +62,8 @@ void normalizationEventAction::BeginOfEventAction(const G4Event* event)
   //print event number
   G4int eventID = event->GetEventID();
   //G4cout << "//***********************************************//" << G4endl;
-  G4cout << "\r";
-  G4cout << "Event Number " << eventID;//		<< G4endl;
+  //G4cout << "\r";
+  //G4cout << "Event Number " << eventID;//		<< G4endl;
   //G4cout << "//***********************************************//" << G4endl;
 
   //store the info that would be destroied by the clear command, so you can use it immediately later
