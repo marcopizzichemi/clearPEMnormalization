@@ -183,7 +183,7 @@ int main (int argc, char** argv)
   //   float minX,minY;
   
   //fake coincidence sorting
-  for(int i = 0; i < /*nEntries*/ /* TEMPORARY LIMITATION FOR CHECKING THE PROGRAM */ 100000 ; i=i+2) //read the event 2 by 2, as they are coupled like this (gamma and back to back gamma)
+  for(int i = 0; i < nEntries /* TEMPORARY LIMITATION FOR CHECKING THE PROGRAM  100000 */; i=i+2) //read the event 2 by 2, as they are coupled like this (gamma and back to back gamma)
   { 
     counter=counter+2;
     
