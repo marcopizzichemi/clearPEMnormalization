@@ -61,18 +61,19 @@ void normalizationEventAction::BeginOfEventAction(const G4Event* event)
 
   //print event number
   G4int eventID = event->GetEventID();
-  G4cout << "//***********************************************//" << G4endl;
-  G4cout << "//              Event Number " << eventID		<< G4endl;
-  G4cout << "//***********************************************//" << G4endl;
+  //G4cout << "//***********************************************//" << G4endl;
+  G4cout << "\r";
+  G4cout << "Event Number " << eventID;//		<< G4endl;
+  //G4cout << "//***********************************************//" << G4endl;
 
   //store the info that would be destroied by the clear command, so you can use it immediately later
   Int_t run = CreateTree::Instance()->Run;
-  long int eventTag = CreateTree::Instance()->EventTag;
+  //long int eventTag = CreateTree::Instance()->EventTag;
   long int seed = CreateTree::Instance()->Seed;
-  int FirstIsCoincidenceCandidate = CreateTree::Instance()->FirstIsCoincidenceCandidate;
+  //int FirstIsCoincidenceCandidate = CreateTree::Instance()->FirstIsCoincidenceCandidate;
   
   //clear the create tree
-  CreateTree::Instance()->Clear();
+  //CreateTree::Instance()->Clear(); // <----------------
   
   //these remained stored in the same way
   CreateTree::Instance()->Seed = seed;
@@ -82,27 +83,12 @@ void normalizationEventAction::BeginOfEventAction(const G4Event* event)
   //store the event tag (pairs)
   if(eventID % 2 == 0)  //this are the "first" events in the pairs
   {
-    if(eventID != 0)   // if it's not the very first event
-      CreateTree::Instance()->EventTag = eventTag+1; // increase the event tag +1
-    else 
-      CreateTree::Instance()->EventTag = 0; // otherwise start from 0
+    CreateTree::Instance()->GammaParity = 0;
   }
   else 
   {
-    CreateTree::Instance()->EventTag = eventTag; // so if it's a "second" event of the pair, keep the same event tag
+    CreateTree::Instance()->GammaParity = 1;
   }
-  
-  //now in the same way, store the crucial info if the first was or not a candidate
-  if(eventID % 2 == 0)  //this are the "first" events in the pairs
-  {
-    // so before entering the event, they are candidate by definition
-    CreateTree::Instance()->FirstIsCoincidenceCandidate = 0;
-  }
-  else //for the second ones, they keep the FirstIsCoincidenceCandidate to 0 only if the one before was actually a candidate
-  {
-    CreateTree::Instance()->FirstIsCoincidenceCandidate = FirstIsCoincidenceCandidate;
-  }
-  //in this way, we will generate always the first gamma, but the second will be generated only if the first was a candidate
 
 }
 
@@ -110,63 +96,33 @@ void normalizationEventAction::BeginOfEventAction(const G4Event* event)
 
 void normalizationEventAction::EndOfEventAction(const G4Event* event)
 {
-  // Accumulate statistics
-  //
-  if(CreateTree::Instance()->totalEnergyDeposited > 0.5)
-    CreateTree::Instance()->FirstIsCoincidenceCandidate = 0;
-  else
-    CreateTree::Instance()->FirstIsCoincidenceCandidate = 1;
-  CreateTree::Instance()->Fill();
+  //now at the end of each event check this
+  // if it's a first gamma do nothing
+  // if it's a second gamma, and both energies were above 0.5, then save the event in the root file //TODO implement skip second if first is not candidate?
+  // otherwise do nothing and clear
+  
+  if(CreateTree::Instance()->GammaParity == 0) //it's first
+  {
+    // do nothing, proceed to next gamma (second)
+  }
+  else  //it's second
+  {
+    if( (CreateTree::Instance()->First_totalEnergyDeposited > 0.5) && (CreateTree::Instance()->Second_totalEnergyDeposited > 0.5) ) // both gammas are candidate
+    {
+      CreateTree::Instance()->Fill();
+    }
+    CreateTree::Instance()->Clear();
+  }
+  
+  
+//   if(CreateTree::Instance()->totalEnergyDeposited > 0.5)
+//     CreateTree::Instance()->FirstIsCoincidenceCandidate = 0;
+//   else
+//     CreateTree::Instance()->FirstIsCoincidenceCandidate = 1;
+//   CreateTree::Instance()->Fill();
   //CreateTree::Instance()->Clear();
   
-  G4cout << "Total Energy deposited in this event = "<< CreateTree::Instance()->totalEnergyDeposited << " MeV" << G4endl;
+  //G4cout << "Total Energy deposited in this event = "<< CreateTree::Instance()->totalEnergyDeposited << " MeV" << G4endl;
   
-  
-  
-  //BEGIN of debug output - not a good idea, works only for 64 crystals - 16 detectors, otherwise gives seg fault. all info is anyway in the root file...
-//   //get total number of crystals
-//   int totCryNum = sizeof(CreateTree::Instance()->pCryEnergyDeposited)/sizeof(CreateTree::Instance()->pCryEnergyDeposited[0]);
-//   //get total number of detectors
-//   int totDetNum =  sizeof(CreateTree::Instance()->DetectorHit)/sizeof(CreateTree::Instance()->DetectorHit[0]);
-//   
-//   G4cout << "sizeof crystals "<<  sizeof(CreateTree::Instance()->pCryEnergyDeposited)/sizeof(CreateTree::Instance()->pCryEnergyDeposited[0]) << G4endl;
-//   G4cout << "sizeof detectors "<<  sizeof(CreateTree::Instance()->DetectorHit)/sizeof(CreateTree::Instance()->DetectorHit[0]) << G4endl;
-//   
-//   for (int i = 0 ; i < 64 ; i++) //FIXME generilize to NxM crystals
-//   {
-//     if(CreateTree::Instance()->pCryEnergyDeposited[i]->size() != 0)
-//     {
-//       G4cout << "Crystal" << i;
-//       for(int j = 0 ; j < CreateTree::Instance()->pCryEnergyDeposited[i]->size() ; j++)
-//       {
-// 	G4cout << "\t" << CreateTree::Instance()->pCryEnergyDeposited[i]->at(j);
-//       }
-//       G4cout << G4endl;
-//       G4cout << "PosX ";
-//       for(int j = 0 ; j < CreateTree::Instance()->pPosXEnDep[i]->size() ; j++)
-//       {
-// 	G4cout << "\t" << CreateTree::Instance()->pPosXEnDep[i]->at(j);
-//       }
-//       G4cout << G4endl;
-//       G4cout << "PosY ";
-//       for(int j = 0 ; j < CreateTree::Instance()->pPosYEnDep[i]->size() ; j++)
-//       {
-// 	G4cout << "\t" << CreateTree::Instance()->pPosYEnDep[i]->at(j);
-//       }
-//       G4cout << G4endl;
-//       G4cout << "PosZ ";
-//       for(int j = 0 ; j < CreateTree::Instance()->pPosZEnDep[i]->size() ; j++)
-//       {
-// 	G4cout << "\t" << CreateTree::Instance()->pPosZEnDep[i]->at(j);
-//       }
-//       G4cout << G4endl;
-//     }
-//   }
-//   //output Detector hits
-//   for(int i = 0 ; i < 16 ; i++)//FIXME generilize to NxM detectors
-//   {
-//     G4cout << "Detector " << i << " = " << CreateTree::Instance()->DetectorHit[i] << G4endl;
-//   }
-  //END of debug output
   
 } 

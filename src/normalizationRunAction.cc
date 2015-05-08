@@ -65,24 +65,17 @@ normalizationRunAction::~normalizationRunAction()
 
 void normalizationRunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  
   gROOT->ProcessLine("#include <vector>"); //this is needed otherwise ROOT will complain about not knowing what a std::vector is...
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   fTimer->Start();
-  
   CreateTree::Instance()->Run = aRun->GetRunID();
-  CreateTree::Instance()->EventTag = 0;
-  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void normalizationRunAction::EndOfRunAction(const G4Run* aRun)
 {
-  
-
-  
   fTimer->Stop();
-  G4cout << "number of event = " << aRun->GetNumberOfEvent() << " " << *fTimer << G4endl;
-
+  G4cout << G4endl;
+  G4cout << "Number of events = " << aRun->GetNumberOfEvent() << " " << *fTimer << G4endl;
 }

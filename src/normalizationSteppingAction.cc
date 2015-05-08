@@ -78,10 +78,10 @@ void normalizationSteppingAction::UserSteppingAction(const G4Step* step)
                                               GetCurrentEvent()->GetEventID();
 
   if (eventNumber != fEventNumber) {
-     G4cout << " Number of Scintillation Photons in previous event: "
-            << fScintillationCounter << G4endl;
-     G4cout << " Number of Cerenkov Photons in previous event: "
-            << fCerenkovCounter << G4endl;
+     //G4cout << " Number of Scintillation Photons in previous event: "
+     //       << fScintillationCounter << G4endl;
+     //G4cout << " Number of Cerenkov Photons in previous event: "
+     //       << fCerenkovCounter << G4endl;
      fEventNumber = eventNumber;
      fScintillationCounter = 0;
      fCerenkovCounter = 0;
@@ -106,68 +106,9 @@ void normalizationSteppingAction::UserSteppingAction(const G4Step* step)
   //getting information from the particles
   
   //for opticalphoton, we want to know where they stopped 
-  if (ParticleName == "opticalphoton") //if it's an opticalphoton
+  if (ParticleName == "opticalphoton") //if it's an opticalphoton, we ignore them in this simulation
   {
     
-    //BEGIN of debug part (flood maps not symmetric issue)
-//     G4OpBoundaryProcessStatus boundaryStatus=Undefined;
-//     static G4ThreadLocal G4OpBoundaryProcess* boundary=NULL;
-//     
-//     //find the boundary process only once
-//     if(!boundary)
-//     {
-//       G4ProcessManager* pm = track->GetDefinition()->GetProcessManager();
-//       G4int nprocesses = pm->GetProcessListLength();
-//       G4ProcessVector* pv = pm->GetProcessList();
-//       G4int i;
-//       for( i=0;i<nprocesses;i++)
-//       {
-// 	if((*pv)[i]->GetProcessName()=="OpBoundary")
-// 	{
-// 	  boundary = (G4OpBoundaryProcess*)(*pv)[i];
-// 	  break;
-// 	}
-//       }
-//     }
-//     boundaryStatus = boundary->GetStatus();
-//     
-//     if((materialName == "AirThinLayer") && (boundaryStatus == Transmission))
-//     {
-//       G4ThreeVector TransmissionPosition = track->GetStep()->GetPostStepPoint()->GetPosition(); //get the position vector
-//       CreateTree::Instance()->TransmissionX.push_back(TransmissionPosition.getX());
-//       CreateTree::Instance()->TransmissionY.push_back(TransmissionPosition.getY());
-//       CreateTree::Instance()->TransmissionZ.push_back(TransmissionPosition.getZ());   
-//     }
-//     
-    //END of debug part (flood maps not symmetric issue)
-    
-    
-    //CreateTree::Instance()->NumOptPhotonsAbsorbed++;
-//     if(track->GetTrackStatus()==fStopAndKill) //if it just died here
-//     {
-//       if(materialName == "SilicioMPPC")
-//       {
-// 	G4String detectorName = step->GetPreStepPoint()->GetPhysicalVolume()->GetName();
-// 	int numb;
-// 	std::istringstream ( detectorName ) >> numb;
-	
-	//take into account quantum efficiency
-// 	G4double rand = G4UniformRand();
-	
-// 	if(rand < quantumEff) //absorb the optical photon, save the relevant data
-// 	{
-// 	  CreateTree::Instance()->DetectorHit[numb]++;
-	  
-// 	  G4ThreeVector OnDetectorPosition = track->GetStep()->GetPreStepPoint()->GetPosition(); //get the position vector
-// 	  G4double globalTime = track->GetGlobalTime();
-	  
-// 	  CreateTree::Instance()->PositionX.push_back(OnDetectorPosition.getX());
-//           CreateTree::Instance()->PositionY.push_back(OnDetectorPosition.getY());
-// 	  CreateTree::Instance()->GlobalTime.push_back(globalTime/CLHEP::ns);
-// 	}
-
-//       } 
-//     }
   }
   else //there's only gammas and electrons. for them, we want to know where they left energy (opticalphoton don't really leave any)
   {
@@ -177,49 +118,32 @@ void normalizationSteppingAction::UserSteppingAction(const G4Step* step)
     {
       if(materialName == "LYSO") //if the gamma is interacting with the detector, it does a huge number of cherenkov
       {
-	//add total energy deposited
-	CreateTree::Instance()->totalEnergyDeposited += edep;
-	//take crystal name
+	//get crystal name and convert it to int
 	G4String crystalName = step->GetPreStepPoint()->GetPhysicalVolume()->GetName();
-	//convert it to int
-	
-// 	if(crystalName == "DH0")
-// 	{
-// 	  CreateTree::Instance()->DH0EnergyDeposited += edep;
-// 	  //add position of deposited energy
-// 	  G4ThreeVector positionVector = track->GetStep()->GetPreStepPoint()->GetPosition(); //get the position vector
-// 	  //call the methods to fill the position vectors
-// 	  CreateTree::Instance()->DH0PosXEnDep.push_back(positionVector.getX());
-// 	  CreateTree::Instance()->DH0PosYEnDep.push_back(positionVector.getY());
-// 	  CreateTree::Instance()->DH0PosZEnDep.push_back(positionVector.getZ());
-// 	}
-// 	else if (crystalName == "DH1")
-// 	{
-// 	  CreateTree::Instance()->DH1EnergyDeposited += edep;
-// 	  //add position of deposited energy
-// 	  G4ThreeVector positionVector = track->GetStep()->GetPreStepPoint()->GetPosition(); //get the position vector
-// 	  //call the methods to fill the position vectors
-// 	  CreateTree::Instance()->DH1PosXEnDep.push_back(positionVector.getX());
-// 	  CreateTree::Instance()->DH1PosYEnDep.push_back(positionVector.getY());
-// 	  CreateTree::Instance()->DH1PosZEnDep.push_back(positionVector.getZ());
-// 	}
-	
-// 	if((crystalName == "DH0") | (crystalName == "DH1"))
-// 	{
-	CreateTree::Instance()->EnergyDeposited.push_back(edep);
-	G4ThreeVector positionVector = track->GetStep()->GetPreStepPoint()->GetPosition(); //get the position vector
-	//call the methods to fill the position vectors
-	CreateTree::Instance()->PosXEnDep.push_back(positionVector.getX());
-	CreateTree::Instance()->PosYEnDep.push_back(positionVector.getY());
-	CreateTree::Instance()->PosZEnDep.push_back(positionVector.getZ());
-// 	}
-	
-	
 	int numb;
 	std::istringstream ( crystalName ) >> numb;
-	//add energy deposited in this step to this crystal
-	CreateTree::Instance()->Crystal.push_back(numb);
+	//get the position vector
+	G4ThreeVector positionVector = track->GetStep()->GetPreStepPoint()->GetPosition(); 
 	
+	//sort between first and second gamma
+	if(CreateTree::Instance()->GammaParity == 0) //then it's a First gamma
+	{
+	  CreateTree::Instance()->First_totalEnergyDeposited += edep;
+	  CreateTree::Instance()->First_EnergyDeposited.push_back(edep);
+	  CreateTree::Instance()->First_PosXEnDep.push_back(positionVector.getX());
+	  CreateTree::Instance()->First_PosYEnDep.push_back(positionVector.getY());
+	  CreateTree::Instance()->First_PosZEnDep.push_back(positionVector.getZ());
+	  CreateTree::Instance()->First_Crystal.push_back(numb);
+	}
+	else //it's a Second gamma
+	{
+	  CreateTree::Instance()->Second_totalEnergyDeposited += edep;
+	  CreateTree::Instance()->Second_EnergyDeposited.push_back(edep);
+	  CreateTree::Instance()->Second_PosXEnDep.push_back(positionVector.getX());
+	  CreateTree::Instance()->Second_PosYEnDep.push_back(positionVector.getY());
+	  CreateTree::Instance()->Second_PosZEnDep.push_back(positionVector.getZ());
+	  CreateTree::Instance()->Second_Crystal.push_back(numb);
+	}
       }
     }
   }
@@ -235,14 +159,14 @@ void normalizationSteppingAction::UserSteppingAction(const G4Step* step)
               if (secondaries->at(i)->GetCreatorProcess()->GetProcessName()
                == "Scintillation")
 	      {
-		CreateTree::Instance()->NumOptPhotons++;
+		//CreateTree::Instance()->NumOptPhotons++;
 		fScintillationCounter++;
 	      }
               if (secondaries->at(i)->GetCreatorProcess()->GetProcessName()
                == "Cerenkov")
 	      {
 		fCerenkovCounter++;
-		CreateTree::Instance()->NumCherenkovPhotons++;
+		//CreateTree::Instance()->NumCherenkovPhotons++;
 	      }
            }
         }

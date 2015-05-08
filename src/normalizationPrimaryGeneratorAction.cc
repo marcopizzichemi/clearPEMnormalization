@@ -164,9 +164,9 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
     sourcez = (G4UniformRand() * phantomz) - ( phantomz/2.0) + posphantomz;
     
-    G4cout << "sourcex = " << sourcex << G4endl;
-    G4cout << "sourcey = " << sourcey << G4endl;
-    G4cout << "sourcez = " << sourcez << G4endl;
+    //G4cout << "sourcex = " << sourcex << G4endl;
+    //G4cout << "sourcey = " << sourcey << G4endl;
+    //G4cout << "sourcez = " << sourcez << G4endl;
     //G4cout << "Theta = " << theta << G4endl;
     //G4cout << "Phi = " << phi << G4endl;
     

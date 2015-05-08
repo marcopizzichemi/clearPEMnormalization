@@ -24,14 +24,7 @@ class CreateTree
   public:
 
   CreateTree(TString name/*,int x, int y, int z, int k*/);
-  ~CreateTree();
-
-  
-  
-  //void SetModuleElements(int x, int y,int z,int k){ nCrystalsX = x; nCrystalsY = y ; nDetectorsX = z ; nDetectorsY = k; };
-  
-  
-  
+  ~CreateTree();  
   
   TTree*              GetTree() const { return ftree; };
   TString             GetName() const { return fname;};
@@ -44,48 +37,38 @@ class CreateTree
   Bool_t              Hits() const { return this->HITS; };
   Bool_t              Absorptions() const { return this->ABSORPTIONS; };
 
+  //global variables
   long int            Seed;
   Int_t               Run;
   Int_t               Event;
-  Int_t               NumOptPhotons;
-  Int_t               NumCherenkovPhotons;
-  Float_t             totalEnergyDeposited;
-
-  Float_t             enPerCrystal[6144]; 
+  Int_t               GammaParity; // 0 if it's First gamma, 1 if it's Second
   
-  long int            EventTag;
-  int                 FirstIsCoincidenceCandidate;
-  
-  Short_t*            DetectorHit;          
-//   int            DetectorHit[16];
-  
-  
-//   std::vector<float>*  CryEnergyDeposited;   
-//   std::vector<float>** pCryEnergyDeposited;
-//   
-  std::vector<float>  EnergyDeposited;
-  std::vector<float>*  pEnergyDeposited;
-  
-  std::vector<int>    Crystal;
-  std::vector<int>*    pCrystal;
+  //variables for first photon 
+  Float_t             First_totalEnergyDeposited;
+  std::vector<float>  First_EnergyDeposited;
+  std::vector<float>* First_pEnergyDeposited;
+  std::vector<int>    First_Crystal;
+  std::vector<int>*   First_pCrystal;
+  std::vector<float>  First_PosXEnDep; 
+  std::vector<float>* First_pPosXEnDep;
+  std::vector<float>  First_PosYEnDep; 
+  std::vector<float>* First_pPosYEnDep;
+  std::vector<float>  First_PosZEnDep; 
+  std::vector<float>* First_pPosZEnDep;
   
   
-  
-  std::vector<float>  PosXEnDep; 
-  std::vector<float>* pPosXEnDep;
-  std::vector<float>  PosYEnDep; 
-  std::vector<float>* pPosYEnDep;
-  std::vector<float>  PosZEnDep; 
-  std::vector<float>* pPosZEnDep;
-  
-  
-//   std::vector<float> PositionX;
-//   std::vector<float> *pPositionX;
-//   std::vector<float> PositionY;
-//   std::vector<float> *pPositionY;
-//   
-//   std::vector<float> GlobalTime;
-//   std::vector<float> *pGlobalTime;
+  //variables for first photon 
+  Float_t             Second_totalEnergyDeposited;
+  std::vector<float>  Second_EnergyDeposited;
+  std::vector<float>* Second_pEnergyDeposited;
+  std::vector<int>    Second_Crystal;
+  std::vector<int>*   Second_pCrystal;
+  std::vector<float>  Second_PosXEnDep; 
+  std::vector<float>* Second_pPosXEnDep;
+  std::vector<float>  Second_PosYEnDep; 
+  std::vector<float>* Second_pPosYEnDep;
+  std::vector<float>  Second_PosZEnDep; 
+  std::vector<float>* Second_pPosZEnDep;
   
   
  
