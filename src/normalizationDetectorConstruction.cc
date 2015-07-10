@@ -1524,7 +1524,7 @@ G4VPhysicalVolume* normalizationDetectorConstruction::Construct()
     } 
   }
   
-  //detector dh0 - crystals
+  //detector dh1 - crystals
   G4Box*** crystal_box_dh1					= new G4Box** [nCrystalsX];
   for(int i = 0 ; i < nCrystalsX ; i++) crystal_box_dh1[i]		= new G4Box* [nCrystalsY];
   G4LogicalVolume*** crystal_log_dh1				= new G4LogicalVolume** [nCrystalsX];

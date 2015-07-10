@@ -97,9 +97,6 @@ int main(int argc,char** argv)
   std::cout<<"#                                                         #"<<std::endl;
   std::cout<<"#           Clear PEM normalization simulation            #"<<std::endl;  
   std::cout<<"#                                                         #"<<std::endl;  
-  //std::cout<<"#                                                         #"<<std::endl;  
-  //std::cout<<"#                                                         #"<<std::endl;
-  //std::cout<<"#                                                         #"<<std::endl;  
   std::cout<<"###########################################################"<<std::endl;
   std::cout<<"\n\n"<<std::endl;
   std::cout<<"=====>   C O N F I G U R A T I O N   <====\n"<<std::endl;
