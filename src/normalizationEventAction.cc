@@ -105,14 +105,14 @@ void normalizationEventAction::EndOfEventAction(const G4Event* event)
   
   if(CreateTree::Instance()->GammaParity == 0) //it's first
   {
-    if(CreateTree::Instance()->First_totalEnergyDeposited < 0.5) // so if the First gamma is not candidate
+    if(CreateTree::Instance()->First_totalEnergyDeposited < 0.3) // so if the First gamma is not candidate
     {
       CreateTree::Instance()->DoEvent = 1; //tell to the primary generator not to generate the gamma in the next event
     }
   }
   else  //it's second
   {
-    if( (CreateTree::Instance()->First_totalEnergyDeposited > 0.5) && (CreateTree::Instance()->Second_totalEnergyDeposited > 0.5) ) // both gammas are candidate
+    if( (CreateTree::Instance()->First_totalEnergyDeposited > 0.3) && (CreateTree::Instance()->Second_totalEnergyDeposited > 0.3) ) // both gammas are candidate
     {
       CreateTree::Instance()->Fill();
     }

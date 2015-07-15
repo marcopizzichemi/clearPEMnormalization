@@ -308,7 +308,7 @@ int main (int argc, char** argv)
     
     for(int j = 0 ; j < cryIDs.size() ; j++)
     {
-      if(energy.at(j) > 0.5) //cannot really happen for 2 crystals, given a source of 511kev and gammas been taken one by one...
+      if(energy.at(j) > 0.3) //cannot really happen for 2 crystals, given a source of 511kev and gammas been taken one by one...
       {
 	cry1 = cryIDs.at(j);
 	energy1 = energy.at(j);
@@ -447,7 +447,7 @@ int main (int argc, char** argv)
       
       for(int j = 0 ; j < cryIDs.size() ; j++)
       {
-	if(energy.at(j) > 0.5) //cannot really happen for 2 crystals, given a source of 511kev and gammas been taken one by one...
+	if(energy.at(j) > 0.3) //cannot really happen for 2 crystals, given a source of 511kev and gammas been taken one by one...
 	{
 	  cry2 = cryIDs.at(j);
 	  energy2 = energy.at(j);

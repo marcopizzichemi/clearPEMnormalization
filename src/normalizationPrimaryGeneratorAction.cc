@@ -40,6 +40,10 @@
 #include "G4SystemOfUnits.hh"
 #include "CreateTree.hh"
 
+#include <iostream>
+#include <fstream>
+using namespace std;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 normalizationPrimaryGeneratorAction::normalizationPrimaryGeneratorAction(ConfigFile& config)
@@ -158,8 +162,13 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   if(isFirst)
   {
     //G4cout << "First" << G4endl;
-    theta = G4UniformRand() * 2.0 * CLHEP::pi;
+    //theta = G4UniformRand() * 2.0 * CLHEP::pi;
+   
     phi = G4UniformRand() * CLHEP::pi;
+    double nrand = G4UniformRand()*2.0-1.0;
+    theta = acos (nrand);
+    
+    
     
     sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
     sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
@@ -214,6 +223,12 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   {
     fParticleGun->GeneratePrimaryVertex(anEvent);
   }
+  
+  ofstream myfile;
+  myfile.open ("SourcePosition.txt",ios::app);
+  myfile << sourcex << " " << sourcey << " " << sourcez << " " << firstTheta << " " << firstPhi << std::endl;
+  myfile.close();
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
