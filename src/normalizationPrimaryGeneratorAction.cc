@@ -130,7 +130,7 @@ normalizationPrimaryGeneratorAction::normalizationPrimaryGeneratorAction(ConfigF
   
   theta = 0;
   phi = 0;
-  
+    
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(sin(theta)*sin(phi),sin(theta)*cos(phi),cos(theta) ));
   fParticleGun->SetParticleEnergy(511*keV);
   isFirst = true;
@@ -150,8 +150,9 @@ normalizationPrimaryGeneratorAction::~normalizationPrimaryGeneratorAction()
 
 void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  
-  
+     
+     double alpha = G4UniformRand()*2*CLHEP::pi;
+     double radius = sqrt(G4UniformRand()*104.54);
   
 //   G4double halfXatrix = ((crystalx + esrThickness) * ncrystalx) / 2.0;
 //   G4double angleLimit = atan(halfXatrix / distance);
@@ -168,12 +169,16 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     double nrand = G4UniformRand()*2.0-1.0;
     theta = acos (nrand);
     
-    
-    
-    sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
+    //cylindrical source
     sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
-    sourcez = (G4UniformRand() * phantomz) - ( phantomz/2.0) + posphantomz;
+    sourcez = radius*sin(alpha);
+    sourcex = radius*cos(alpha);
     
+    //planar source
+    //sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
+    //sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
+    //sourcez = (G4UniformRand() * phantomz) - ( phantomz/2.0) + posphantomz;
+       
     //G4cout << "sourcex = " << sourcex << G4endl;
     //G4cout << "sourcey = " << sourcey << G4endl;
     //G4cout << "sourcez = " << sourcez << G4endl;
