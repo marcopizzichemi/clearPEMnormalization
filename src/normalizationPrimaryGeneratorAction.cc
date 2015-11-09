@@ -170,14 +170,14 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     theta = acos (nrand);
     
     //cylindrical source
-    sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
-    sourcez = radius*sin(alpha);
-    sourcex = radius*cos(alpha);
+    //sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
+    //sourcez = radius*sin(alpha);
+    //sourcex = radius*cos(alpha);
     
     //planar source
-    //sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
-    //sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
-    //sourcez = (G4UniformRand() * phantomz) - ( phantomz/2.0) + posphantomz;
+    sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
+    sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
+    sourcez = (G4UniformRand() * phantomz) - ( phantomz/2.0) + posphantomz;
        
     //G4cout << "sourcex = " << sourcex << G4endl;
     //G4cout << "sourcey = " << sourcey << G4endl;
