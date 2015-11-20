@@ -90,9 +90,9 @@ int main (int argc, char** argv)
   Float_t distance;
   Float_t yozRot;
   Float_t absTime;
-  distance = atof(argv[argc -1]);
+  distance = atof(argv[argc -3]);
   yozRot   = atof(argv[argc -2]);  //head rotation, in radiands
-  absTime  = atof(argv[argc -3]); //t_start of this take, from the beginning of this part of the "exam"
+  absTime  = atof(argv[argc -1]); //t_start of this take, from the beginning of this part of the "exam"
   
   
   //output file in text format - FIXME clean this
