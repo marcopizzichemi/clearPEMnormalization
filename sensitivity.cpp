@@ -82,7 +82,7 @@ int main (int argc, char** argv)
   
   //open the input file(s) using a TChain
   TChain *tree =  new TChain("tree");
-  for (int i = 1 ; i < 2  ; i++) // -3 is because the last 3 args HAVE to be heads distance, yozRot and absTime. They can't be omitted (or the last 3 input files will be omitted, ot the program will crash if the input files are less than 3).
+  for (int i = 1 ; i < argc - 3  ; i++) // -3 is because the last 3 args HAVE to be heads distance, yozRot and absTime. They can't be omitted (or the last 3 input files will be omitted, ot the program will crash if the input files are less than 3).
   {
     std::cout << "Adding file " << argv[i] << std::endl;
     tree->Add(argv[1]);
