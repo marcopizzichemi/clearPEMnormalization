@@ -82,11 +82,18 @@ int main (int argc, char** argv)
   
   //open the input file(s) using a TChain
   TChain *tree =  new TChain("tree");
-  for (int i = 1 ; i < argc ; i++)
+  for (int i = 1 ; i < 2  ; i++) // -3 is because the last 3 args HAVE to be heads distance, yozRot and absTime. They can't be omitted (or the last 3 input files will be omitted, ot the program will crash if the input files are less than 3).
   {
     std::cout << "Adding file " << argv[i] << std::endl;
-    tree->Add(argv[i]);
+    tree->Add(argv[1]);
   }
+  Float_t distance;
+  Float_t yozRot;
+  Float_t absTime;
+  distance = atof(argv[argc -1]);
+  yozRot   = atof(argv[argc -2]);  //head rotation, in radiands
+  absTime  = atof(argv[argc -3]); //t_start of this take, from the beginning of this part of the "exam"
+  
   
   //output file in text format - FIXME clean this
 //   std::string oFile = "t.dat";
@@ -182,9 +189,11 @@ int main (int argc, char** argv)
   u_int8_t randomSet = 0;
   u_int8_t n1Set = 1;
   u_int8_t n2Set = 1;
-  Float_t distance = 209.059998; //real heads distance, in mm //FIXME hardcoded for now
-  Float_t yozRot = 0.0; //head rotation, in radiands          //again hardcoded but this is for normalization, so..
-  Float_t absTime = 0.0; //t_start of this take, from the beginning of the "exam"
+  
+  
+  //Float_t distance = 209.059998; //real heads distance, in mm //FIXME hardcoded for now
+  //Float_t yozRot = 0.0; //head rotation, in radiands          //again hardcoded but this is for normalization, so..
+  //Float_t absTime = 0.0; //t_start of this take, from the beginning of the "exam"
   
   //   if(argc > 2)
   //     distance = atof(argv[2]);
