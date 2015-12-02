@@ -1290,7 +1290,7 @@ G4VPhysicalVolume* normalizationDetectorConstruction::Construct()
  
   G4Tubs* phantom_box = new G4Tubs("phantom",0,104.54,phantomy/2.0,0.*deg,360.*deg);
   G4RotationMatrix* rmatrix = new G4RotationMatrix();
-  rmatrix -> rotateX(90*deg);
+  rmatrix -> rotateY(90*deg);
   G4LogicalVolume* phantom_log = new G4LogicalVolume(phantom_box,airThinLayer,"phantom",0,0,0);
   G4VPhysicalVolume* phantom_phys = new 
   G4PVPlacement(rmatrix,G4ThreeVector(posphantomx,posphantomy,posphantomz),phantom_log,"phantom",expHall_log,false,0);
