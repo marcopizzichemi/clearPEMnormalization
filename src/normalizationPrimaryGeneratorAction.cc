@@ -152,7 +152,9 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
      
      double alpha = G4UniformRand()*2*CLHEP::pi;
-     double radius = sqrt(G4UniformRand()*104.54);
+     double ranradius = sqrt(G4UniformRand());
+     double radius = ranradius*104.54;
+  
   
 //   G4double halfXatrix = ((crystalx + esrThickness) * ncrystalx) / 2.0;
 //   G4double angleLimit = atan(halfXatrix / distance);
@@ -177,7 +179,7 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     //cylindrical source rotated
     sourcey = radius*sin(alpha);
     sourcez = radius*cos(alpha);
-    sourcex = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
+    sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
   
     
     //planar source
