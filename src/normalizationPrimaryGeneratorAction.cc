@@ -177,21 +177,30 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     //sourcex = radius*cos(alpha);
     
     //cylindrical source rotated
-    sourcey = radius*sin(alpha);
-    sourcez = radius*cos(alpha);
-    sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
-  
-    
+    //sourcey = radius*sin(alpha);
+    //sourcez = radius*cos(alpha);
+    //sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
+        
     //planar source
-//     sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
-//     sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
-//     sourcez = (G4UniformRand() * phantomz) - ( phantomz/2.0) + posphantomz;
+     sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
+     sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
+     sourcez = (G4UniformRand() * phantomz) - ( phantomz/2.0) + posphantomz;
        
     //G4cout << "sourcex = " << sourcex << G4endl;
     //G4cout << "sourcey = " << sourcey << G4endl;
     //G4cout << "sourcez = " << sourcez << G4endl;
     //G4cout << "Theta = " << theta << G4endl;
     //G4cout << "Phi = " << phi << G4endl;
+    
+    //octagonal source
+    //sourcex = INFINITY;
+    //sourcey = INFINITY;
+    //G4double distanza = 100;
+ //while( (y > mx+q)|(y > mx+q)|(y > mx+q)|(y > mx+q) )
+// {
+  //sourcex = (G4UniformRand() * (distanza)) - (distanza/2.0);
+  //sourcey = (G4UniformRand() * (distanza)) - (distanza/2.0);
+// }
     
     preSourcex = sourcex;
     preSourcey = sourcey;
