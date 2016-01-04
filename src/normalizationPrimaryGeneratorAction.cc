@@ -150,7 +150,8 @@ normalizationPrimaryGeneratorAction::~normalizationPrimaryGeneratorAction()
 
 void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-     
+  
+     //cylindrical source constants
      double alpha = G4UniformRand()*2*CLHEP::pi;
      double ranradius = sqrt(G4UniformRand());
      double radius = ranradius*104.54;
@@ -171,20 +172,16 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     double nrand = G4UniformRand()*2.0-1.0;
     theta = acos (nrand);
     
-    //cylindrical source
-    //sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
-    //sourcez = radius*sin(alpha);
-    //sourcex = radius*cos(alpha);
-    
+     
     //cylindrical source rotated
-    //sourcey = radius*sin(alpha);
-    //sourcez = radius*cos(alpha);
-    //sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
+    sourcey = radius*sin(alpha);
+    sourcez = radius*cos(alpha);
+    sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
         
     //planar source
-     sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
-     sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
-     sourcez = (G4UniformRand() * phantomz) - ( phantomz/2.0) + posphantomz;
+     //sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
+     //sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
+     //sourcez = (G4UniformRand() * phantomz) - ( phantomz/2.0) + posphantomz;
        
     //G4cout << "sourcex = " << sourcex << G4endl;
     //G4cout << "sourcey = " << sourcey << G4endl;
@@ -193,14 +190,14 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     //G4cout << "Phi = " << phi << G4endl;
     
     //octagonal source
-    //sourcex = INFINITY;
+    //sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
     //sourcey = INFINITY;
-    //G4double distanza = 100;
- //while( (y > mx+q)|(y > mx+q)|(y > mx+q)|(y > mx+q) )
-// {
-  //sourcex = (G4UniformRand() * (distanza)) - (distanza/2.0);
-  //sourcey = (G4UniformRand() * (distanza)) - (distanza/2.0);
-// }
+    //double distanza = 209.08;
+    //while( (sourcey > (sourcez-147.82)) )
+    //{
+    //sourcez = (G4UniformRand() * (distanza)) - (distanza/2.0);
+    //sourcey = (G4UniformRand() * (distanza)) - (distanza/2.0);
+    //}
     
     preSourcex = sourcex;
     preSourcey = sourcey;
@@ -209,9 +206,9 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     firstTheta = theta ;
     firstPhi = phi;
     isFirst = false;
-  }
-  else
-  {
+    }
+    else
+    {
 //     G4cout << "Second" << G4endl;
     theta = firstTheta + CLHEP::pi;
     phi = firstPhi;
