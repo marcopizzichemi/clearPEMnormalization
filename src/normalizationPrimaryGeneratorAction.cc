@@ -152,9 +152,9 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   
      //cylindrical source constants
-     double alpha = G4UniformRand()*2*CLHEP::pi;
-     double ranradius = sqrt(G4UniformRand());
-     double radius = ranradius*104.54;
+     //double alpha = G4UniformRand()*2*CLHEP::pi;
+     //double ranradius = sqrt(G4UniformRand());
+     //double radius = ranradius*104.54;
   
   
 //   G4double halfXatrix = ((crystalx + esrThickness) * ncrystalx) / 2.0;
@@ -163,65 +163,56 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 //   theta = (G4UniformRand() * 2.0*angleLimit) - angleLimit;
 //   phi = G4UniformRand() * CLHEP::pi;
   
-  if(isFirst)
-  {
-    //G4cout << "First" << G4endl;
-    //theta = G4UniformRand() * 2.0 * CLHEP::pi;
-   
-    phi = G4UniformRand() * CLHEP::pi;
-    double nrand = G4UniformRand()*2.0-1.0;
-    theta = acos (nrand);
-    
+     if(isFirst)
+     {
+      
+      //G4cout << "First" << G4endl;
+      //theta = G4UniformRand() * 2.0 * CLHEP::pi;
      
-    //cylindrical source rotated
-    sourcey = radius*sin(alpha);
-    sourcez = radius*cos(alpha);
-    sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
-        
-    //planar source
-     //sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
-     //sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
-     //sourcez = (G4UniformRand() * phantomz) - ( phantomz/2.0) + posphantomz;
+      phi = G4UniformRand() * CLHEP::pi;
+      double nrand = G4UniformRand()*2.0-1.0;
+      theta = acos (nrand);
        
-    //G4cout << "sourcex = " << sourcex << G4endl;
-    //G4cout << "sourcey = " << sourcey << G4endl;
-    //G4cout << "sourcez = " << sourcez << G4endl;
-    //G4cout << "Theta = " << theta << G4endl;
-    //G4cout << "Phi = " << phi << G4endl;
+//    planar source
+      sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
+      sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
+      sourcez = (G4UniformRand() * phantomz) - ( phantomz/2.0) + posphantomz;
+     
+      //G4cout << "sourcex = " << sourcex << G4endl;
+      //G4cout << "sourcey = " << sourcey << G4endl;
+      //G4cout << "sourcez = " << sourcez << G4endl;
+      //G4cout << "Theta = " << theta << G4endl;
+      //G4cout << "Phi = " << phi << G4endl;
+      
+//    cylindrical source rotated
+//    sourcey = radius*sin(alpha);
+//    sourcez = radius*cos(alpha);
+//    sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;  
+      
+      preSourcex = sourcex;
+      preSourcey = sourcey;
+      preSourcez = sourcez;
+     
+      firstTheta = theta ;
+      firstPhi = phi;
+      isFirst = false;
+      
+      }
+      
+      else
+      {
+      //G4cout << "Second" << G4endl;
+      theta = firstTheta + CLHEP::pi;
+      phi = firstPhi;
     
-    //octagonal source
-    //sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
-    //sourcey = INFINITY;
-    //double distanza = 209.08;
-    //while( (sourcey > (sourcez-147.82)) )
-    //{
-    //sourcez = (G4UniformRand() * (distanza)) - (distanza/2.0);
-    //sourcey = (G4UniformRand() * (distanza)) - (distanza/2.0);
-    //}
-    
-    preSourcex = sourcex;
-    preSourcey = sourcey;
-    preSourcez = sourcez;
-    
-    firstTheta = theta ;
-    firstPhi = phi;
-    isFirst = false;
-    }
-    else
-    {
-//     G4cout << "Second" << G4endl;
-    theta = firstTheta + CLHEP::pi;
-    phi = firstPhi;
-    
-    sourcex = preSourcex;
-    sourcey = preSourcey;
-    sourcez = preSourcez;
-    
-//     G4cout << "Theta = " << theta << G4endl;
-//     G4cout << "Phi = " << phi << G4endl;
-    
-    isFirst = true;
-  }
+      sourcex = preSourcex;
+      sourcey = preSourcey;
+      sourcez = preSourcez;
+      
+      //G4cout << "Theta = " << theta << G4endl;
+      //G4cout << "Phi = " << phi << G4endl;
+      isFirst = true;
+      }
   
   //G4cout << "Theta = " << theta << G4endl;
   //G4cout << "Phi = " << phi << G4endl;
