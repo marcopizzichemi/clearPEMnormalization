@@ -152,9 +152,10 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   
      //cylindrical source constants
-     //double alpha = G4UniformRand()*2*CLHEP::pi;
-     //double ranradius = sqrt(G4UniformRand());
+     double alpha = G4UniformRand()*2*CLHEP::pi;
+     double ranradius = sqrt(G4UniformRand());
      //double radius = ranradius*104.54;
+     double radius = ranradius*124.5;
   
   
 //   G4double halfXatrix = ((crystalx + esrThickness) * ncrystalx) / 2.0;
@@ -174,9 +175,9 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       theta = acos (nrand);
        
 //    planar source
-      sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
-      sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
-      sourcez = (G4UniformRand() * phantomz) - ( phantomz/2.0) + posphantomz;
+//    sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
+//    sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
+//    sourcez = (G4UniformRand() * phantomz) - ( phantomz/2.0) + posphantomz;
      
       //G4cout << "sourcex = " << sourcex << G4endl;
       //G4cout << "sourcey = " << sourcey << G4endl;
@@ -185,9 +186,9 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       //G4cout << "Phi = " << phi << G4endl;
       
 //    cylindrical source rotated
-//    sourcey = radius*sin(alpha);
-//    sourcez = radius*cos(alpha);
-//    sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;  
+      sourcey = radius*sin(alpha);
+      sourcez = radius*cos(alpha);
+      sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;  
       
       preSourcex = sourcex;
       preSourcey = sourcey;
