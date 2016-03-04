@@ -152,9 +152,16 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   
      //cylindrical source constants
-     double alpha = G4UniformRand()*2*CLHEP::pi;
-     double ranradius = sqrt(G4UniformRand());
+     //double alpha = G4UniformRand()*2*CLHEP::pi;
+     //double ranradius = sqrt(G4UniformRand());
      //double radius = ranradius*104.54;
+     //double radius = ranradius*124.5;
+     
+     //spherical source constants
+     double alpha = G4UniformRand()*2*CLHEP::pi;
+     double ran = G4UniformRand();
+     double beta = acos(2*ran-1);
+     double ranradius = cbrt(G4UniformRand());
      double radius = ranradius*124.5;
   
   
@@ -186,9 +193,14 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       //G4cout << "Phi = " << phi << G4endl;
       
 //    cylindrical source rotated
-      sourcey = radius*sin(alpha);
-      sourcez = radius*cos(alpha);
-      sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;  
+//    sourcey = radius*sin(alpha);
+//    sourcez = radius*cos(alpha);
+//    sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;  
+      
+//    spherical source
+      sourcex = radius*cos(beta);
+      sourcey = radius*sin(beta)*cos(alpha);
+      sourcez = radius*sin(beta)*sin(alpha);
       
       preSourcex = sourcex;
       preSourcey = sourcey;
