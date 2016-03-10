@@ -163,6 +163,9 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
      double beta = acos(2*ran-1);
      double ranradius = cbrt(G4UniformRand());
      double radius = ranradius*124.5;
+     double ranRlesion = cbrt(G4UniformRand());
+     double Rlesion = ranRlesion*10;
+     double prob = G4UniformRand();
   
   
 //   G4double halfXatrix = ((crystalx + esrThickness) * ncrystalx) / 2.0;
@@ -182,9 +185,9 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       theta = acos (nrand);
        
 //    planar source
-//    sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
-//    sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
-//    sourcez = (G4UniformRand() * phantomz) - ( phantomz/2.0) + posphantomz;
+    sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
+    sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
+    sourcez = (G4UniformRand() * phantomz) - ( phantomz/2.0) + posphantomz;
      
       //G4cout << "sourcex = " << sourcex << G4endl;
       //G4cout << "sourcey = " << sourcey << G4endl;
@@ -198,10 +201,25 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 //    sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;  
       
 //    spherical source
-      sourcex = radius*cos(beta);
-      sourcey = radius*sin(beta)*cos(alpha);
-      sourcez = radius*sin(beta)*sin(alpha);
+//    sourcex = posphantomx + radius*cos(beta);
+//    sourcey = posphantomy + radius*sin(beta)*cos(alpha);
+//    sourcez = posphantomy + radius*sin(beta)*sin(alpha);
       
+//    breast and lesion source  
+//    if (prob < 0.9)
+//    {
+//	sourcex = posphantomx + radius*cos(beta);
+//	sourcey = posphantomy + radius*sin(beta)*cos(alpha);
+//	sourcez = posphantomz + radius*sin(beta)*sin(alpha);  
+//    }
+//    else
+//    {
+//	sourcex = -20 + Rlesion*cos(beta);
+//	sourcey = Rlesion*sin(beta)*cos(alpha);
+//	sourcez = Rlesion*sin(beta)*sin(alpha);  
+//    }
+	  
+	
       preSourcex = sourcex;
       preSourcey = sourcey;
       preSourcez = sourcez;
