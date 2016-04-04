@@ -1302,20 +1302,20 @@ G4VPhysicalVolume* normalizationDetectorConstruction::Construct()
    
   //planar phantom
   
-//  G4Box* phantom_box = new G4Box("phantom",phantomx / 2.0, phantomy / 2.0 , phantomz / 2.0);
-//  G4LogicalVolume* phantom_log = new G4LogicalVolume(phantom_box,airThinLayer,"phantom",0,0,0);
-//  G4VPhysicalVolume* phantom_phys = new G4PVPlacement(0,G4ThreeVector(posphantomx,posphantomy,posphantomz),phantom_log,"phantom",expHall_log,false,0);
-//  G4VisAttributes* phantomVisulizationAttribute = new G4VisAttributes(G4Colour(1.0,0.0,0.0)); //red
-//  phantom_log->SetVisAttributes(phantomVisulizationAttribute); // we also set here the visualization colors
+  G4Box* phantom_box = new G4Box("phantom",phantomx / 2.0, phantomy / 2.0 , phantomz / 2.0);
+  G4LogicalVolume* phantom_log = new G4LogicalVolume(phantom_box,airThinLayer,"phantom",0,0,0);
+  G4VPhysicalVolume* phantom_phys = new G4PVPlacement(0,G4ThreeVector(posphantomx,posphantomy,posphantomz),phantom_log,"phantom",expHall_log,false,0);
+  G4VisAttributes* phantomVisulizationAttribute = new G4VisAttributes(G4Colour(1.0,0.0,0.0)); //red
+  phantom_log->SetVisAttributes(phantomVisulizationAttribute); // we also set here the visualization colors
   
   //spherical phantom
   
-  G4Orb* phantom_box = new G4Orb("phantom",124.5*mm);
-  G4LogicalVolume* phantom_log = new G4LogicalVolume(phantom_box,airThinLayer,"phantom",0,0,0);
-  G4VPhysicalVolume* phantom_phys = new 
-  G4PVPlacement(0,G4ThreeVector(posphantomx,posphantomy,posphantomz),phantom_log,"phantom",expHall_log,false,0);
-  G4VisAttributes* phantomVisulizationAttribute = new G4VisAttributes(G4Colour(1.0,0.0,0.0)); //red
-  phantom_log->SetVisAttributes(phantomVisulizationAttribute); // we also set here the visualization colors
+//  G4Orb* phantom_box = new G4Orb("phantom",124.5*mm);
+//  G4LogicalVolume* phantom_log = new G4LogicalVolume(phantom_box,airThinLayer,"phantom",0,0,0);
+//  G4VPhysicalVolume* phantom_phys = new 
+//  G4PVPlacement(0,G4ThreeVector(posphantomx,posphantomy,posphantomz),phantom_log,"phantom",expHall_log,false,0);
+//  G4VisAttributes* phantomVisulizationAttribute = new G4VisAttributes(G4Colour(1.0,0.0,0.0)); //red
+//  phantom_log->SetVisAttributes(phantomVisulizationAttribute); // we also set here the visualization colors
   
   //detector 1 //FIXME for the moment it's airThinLayer
   G4Box* DH1_box = new G4Box("DH1",headx / 2.0, heady / 2.0 , headz / 2.0);
