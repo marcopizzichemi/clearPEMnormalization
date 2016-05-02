@@ -186,9 +186,9 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       theta = acos (nrand);
        
 //    planar source
-//    sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
-//    sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
-//    sourcez = (G4UniformRand() * phantomz) - ( phantomz/2.0) + posphantomz;
+    sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;
+    sourcey = (G4UniformRand() * phantomy) - ( phantomy/2.0) + posphantomy;
+    sourcez = (G4UniformRand() * phantomz) - ( phantomz/2.0) + posphantomz;
      
       //G4cout << "sourcex = " << sourcex << G4endl;
       //G4cout << "sourcey = " << sourcey << G4endl;
@@ -207,9 +207,9 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 //    sourcez = posphantomy + radius*sin(beta)*sin(alpha);
     
 //   small spherical source
-     sourcex = posphantomx + smallradius*cos(beta);
-     sourcey = posphantomy + smallradius*sin(beta)*cos(alpha);
-     sourcez = posphantomy + smallradius*sin(beta)*sin(alpha);
+//     sourcex = posphantomx + smallradius*cos(beta);
+//     sourcey = posphantomy + smallradius*sin(beta)*cos(alpha);
+//     sourcez = posphantomy + smallradius*sin(beta)*sin(alpha);
       
 //    breast and lesion source  
 //    if (prob < 0.9)
