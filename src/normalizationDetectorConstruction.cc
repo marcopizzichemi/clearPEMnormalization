@@ -1277,8 +1277,11 @@ G4VPhysicalVolume* normalizationDetectorConstruction::Construct()
   
   //detector 0 //FIXME for the moment it's airThinLayer
   G4Box* DH0_box = new G4Box("DH0",headx / 2.0, heady / 2.0 , headz / 2.0);
+  G4RotationMatrix* rmatrix0 = new G4RotationMatrix();
+  std::cout << "Rot " << rotdh << std::endl;
+  rmatrix0 -> rotateX(rotdh*deg);
   G4LogicalVolume* DH0_log = new G4LogicalVolume(DH0_box,airThinLayer,"DH0",0,0,0);
-  G4VPhysicalVolume* DH0_phys = new G4PVPlacement(0,G4ThreeVector(posdh0x,posdh0y,posdh0z),DH0_log,"DH0",expHall_log,false,0);
+  G4VPhysicalVolume* DH0_phys = new G4PVPlacement(rmatrix0,G4ThreeVector(posdh0x,posdh0y,posdh0z),DH0_log,"DH0",expHall_log,false,0);
   G4VisAttributes* DH0VisulizationAttribute = new G4VisAttributes(G4Colour(0.0,1.0,0.0)); //green
   DH0_log->SetVisAttributes(DH0VisulizationAttribute); // we also set here the visualization colors
   
@@ -1309,7 +1312,6 @@ G4VPhysicalVolume* normalizationDetectorConstruction::Construct()
 //  phantom_log->SetVisAttributes(phantomVisulizationAttribute); // we also set here the visualization colors
   
   //spherical phantom
-  
   G4Orb* phantom_box = new G4Orb("phantom",124.5*mm);
   G4LogicalVolume* phantom_log = new G4LogicalVolume(phantom_box,airThinLayer,"phantom",0,0,0);
   G4VPhysicalVolume* phantom_phys = new 
@@ -1319,8 +1321,10 @@ G4VPhysicalVolume* normalizationDetectorConstruction::Construct()
   
   //detector 1 //FIXME for the moment it's airThinLayer
   G4Box* DH1_box = new G4Box("DH1",headx / 2.0, heady / 2.0 , headz / 2.0);
+  G4RotationMatrix* rmatrix1 = new G4RotationMatrix();
+  rmatrix1 -> rotateX(rotdh*deg);
   G4LogicalVolume* DH1_log = new G4LogicalVolume(DH1_box,airThinLayer,"DH1",0,0,0);
-  G4VPhysicalVolume* DH1_phys = new G4PVPlacement(0,G4ThreeVector(posdh1x,posdh1y,posdh1z),DH1_log,"DH1",expHall_log,false,0);
+  G4VPhysicalVolume* DH1_phys = new G4PVPlacement(rmatrix1,G4ThreeVector(posdh1x,posdh1y,posdh1z),DH1_log,"DH1",expHall_log,false,0);
   G4VisAttributes* DH1VisulizationAttribute = new G4VisAttributes(G4Colour(0.0,1.0,0.0)); //green
   DH1_log->SetVisAttributes(DH1VisulizationAttribute); // we also set here the visualization colors
   

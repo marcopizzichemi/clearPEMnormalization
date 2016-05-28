@@ -162,11 +162,14 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
      double ran = G4UniformRand();
      double beta = acos(2*ran-1);
      double ranradius = cbrt(G4UniformRand());
-     double radius = ranradius*124.5;
-     double smallradius = ranradius*60;
-     double ranRlesion = cbrt(G4UniformRand());
-     double Rlesion = ranRlesion*10;
-     double prob = G4UniformRand();
+     double radius = ranradius*10;
+//     double ranRlesion = cbrt(G4UniformRand());
+//     double Rlesion = ranRlesion*10;
+//     double prob = G4UniformRand();
+     
+//   sin e cos dell'angolo di rotazione  
+     double cosdelta = 0; 
+     double sendelta = 1;
   
   
 //   G4double halfXatrix = ((crystalx + esrThickness) * ncrystalx) / 2.0;
@@ -204,26 +207,26 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 //    spherical source
 //    sourcex = posphantomx + radius*cos(beta);
 //    sourcey = posphantomy + radius*sin(beta)*cos(alpha);
-//    sourcez = posphantomy + radius*sin(beta)*sin(alpha);
-    
-//   small spherical source
-//     sourcex = posphantomx + smallradius*cos(beta);
-//     sourcey = posphantomy + smallradius*sin(beta)*cos(alpha);
-//     sourcez = posphantomy + smallradius*sin(beta)*sin(alpha);
+//    sourcez = posphantomy + radius*sin(beta)*sin(alpha);   
       
-//    breast and lesion source  
-    if (prob > 0.9)
-    {
-	sourcex = posphantomx + radius*cos(beta);
-	sourcey = posphantomy + radius*sin(beta)*cos(alpha);
-	sourcez = posphantomz + radius*sin(beta)*sin(alpha);  
-    }
-    else
-    {
-	sourcex = -40 + Rlesion*cos(beta);
-	sourcey = Rlesion*sin(beta)*cos(alpha);
-	sourcez = Rlesion*sin(beta)*sin(alpha);  
-    }
+//    spherical lesion
+      sourcex = posphantomx + radius*cos(beta);
+      sourcey = (posphantomy + radius*sin(beta)*cos(alpha))*cosdelta - (posphantomy + radius*sin(beta)*sin(alpha))*sendelta;
+      sourcez = (posphantomy + radius*sin(beta)*cos(alpha))*sendelta + (posphantomy + radius*sin(beta)*sin(alpha))*cosdelta;   
+      
+//    breast and lesion source  - first hypotheses
+//    if (prob > 0.9)
+//    {
+//	sourcex = posphantomx + radius*cos(beta);
+//	sourcey = posphantomy + radius*sin(beta)*cos(alpha);
+//	sourcez = posphantomz + radius*sin(beta)*sin(alpha);  
+//    }
+//    else
+//    {
+//	sourcex = -40 + Rlesion*cos(beta);
+//	sourcey = Rlesion*sin(beta)*cos(alpha);
+//	sourcez = Rlesion*sin(beta)*sin(alpha);  
+//    }
 	  
 	
       preSourcex = sourcex;

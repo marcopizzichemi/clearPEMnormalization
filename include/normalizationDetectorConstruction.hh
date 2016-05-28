@@ -52,6 +52,7 @@ class normalizationDetectorConstruction : public G4VUserDetectorConstruction
     void SetDH1Position(G4double x,G4double y,G4double z){posdh1x = x;posdh1y = y;posdh1z = z;};
     void SetPhantomDimensions(G4double x,G4double y,G4double z){phantomx = x;phantomy = y;phantomz = z;};
     void SetPhantomPosition(G4double x,G4double y,G4double z){posphantomx = x;posphantomy = y;posphantomz = z;};
+    void SetRotation(G4double x){rotdh = x;};
     
 //     void SetCrystalDimensions(G4double x, G4double y, G4double z) { fCrystal_x = x *mm ; fCrystal_y = y*mm ; fCrystal_z =z*mm; };
 //     void SetNumberOfCrystals(G4int nx, G4int ny) {nCrystalsX = nx; nCrystalsY = ny;};
@@ -117,6 +118,8 @@ class normalizationDetectorConstruction : public G4VUserDetectorConstruction
     G4double posphantomx;
     G4double posphantomy;
     G4double posphantomz;
+
+    G4double rotdh;
     
 //     G4double fCrystal_x;				//x dimensions of crystals
 //     G4double fCrystal_y;				//y dimensions of crystals

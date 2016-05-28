@@ -182,6 +182,10 @@ int main(int argc,char** argv)
   G4cout << "Phantom y pos [mm]: " << posphantomy << G4endl;
   G4cout << "Phantom z pos [mm]: " << posphantomz << G4endl;
   
+  G4double rotdh = config.read<double>("rotdh",0);
+  G4cout << "Rotation angle [deg]: " << rotdh << G4endl;
+  
+  
   //read crystal dimensions
 //   G4double crystalx = config.read<double>("crystalx");
 //   G4double crystaly = config.read<double>("crystaly");
@@ -360,6 +364,7 @@ int main(int argc,char** argv)
   ((normalizationDetectorConstruction*)detector)->SetDH1Position(posdh1x,posdh1y,posdh1z);
   ((normalizationDetectorConstruction*)detector)->SetPhantomDimensions(phantomx,phantomy,phantomz);
   ((normalizationDetectorConstruction*)detector)->SetPhantomPosition(posphantomx,posphantomy,posphantomz);
+  ((normalizationDetectorConstruction*)detector)->SetRotation(rotdh);
   
   
 //   ((normalizationDetectorConstruction*)detector)->SetCrystalDimensions(crystalx,crystaly,crystalz);
