@@ -168,8 +168,8 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 //     double prob = G4UniformRand();
      
 //   sin e cos dell'angolo di rotazione  
-     double cosdelta = 1; 
-     double sendelta = 0;
+     double cosdelta = -0.71; 
+     double sendelta = 0.7;
   
   
 //   G4double halfXatrix = ((crystalx + esrThickness) * ncrystalx) / 2.0;
