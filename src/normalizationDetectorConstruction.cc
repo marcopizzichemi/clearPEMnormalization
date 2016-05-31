@@ -1270,7 +1270,7 @@ G4VPhysicalVolume* normalizationDetectorConstruction::Construct()
   
   
   
-  G4Box* expHall_box = new G4Box("World",headx,heady,worldz);
+  G4Box* expHall_box = new G4Box("World",250.0,250.0,worldz);
   G4LogicalVolume* expHall_log = new G4LogicalVolume(expHall_box,airThinLayer,"World",0,0,0);
   G4VPhysicalVolume* expHall_phys = new G4PVPlacement(0,G4ThreeVector(),expHall_log,"World",0,false,fCheckOverlaps);
   
