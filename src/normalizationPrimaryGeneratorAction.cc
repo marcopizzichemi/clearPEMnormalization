@@ -212,7 +212,7 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 //    spherical lesion
       sourcex = posphantomx + radius*cos(beta);
       sourcey = (posphantomy + radius*sin(beta)*cos(alpha))*cosdelta - (posphantomy + radius*sin(beta)*sin(alpha))*sendelta;
-      sourcez = (posphantomy + radius*sin(beta)*cos(alpha))*sendelta + (posphantomy + radius*sin(beta)*sin(alpha))*cosdelta;   
+      sourcez = (posphantomz + radius*sin(beta)*cos(alpha))*sendelta + (posphantomz + radius*sin(beta)*sin(alpha))*cosdelta;   
       
 //    breast and lesion source  - first hypotheses
 //    if (prob > 0.9)
