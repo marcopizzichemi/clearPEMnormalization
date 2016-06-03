@@ -168,8 +168,8 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 //     double prob = G4UniformRand();
      
 //   sin e cos dell'angolo di rotazione  
-     double cosdelta = -0.70; 
-     double sendelta = -0.71;
+//     double cosdelta = -0.70; 
+//     double sendelta = -0.71;
   
   
 //   G4double halfXatrix = ((crystalx + esrThickness) * ncrystalx) / 2.0;
@@ -205,14 +205,14 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 //    sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;  
       
 //    spherical source
-//    sourcex = posphantomx + radius*cos(beta);
-//    sourcey = posphantomy + radius*sin(beta)*cos(alpha);
-//    sourcez = posphantomz + radius*sin(beta)*sin(alpha);   
+    sourcex = posphantomx + radius*cos(beta);
+    sourcey = posphantomy + radius*sin(beta)*cos(alpha);
+    sourcez = posphantomz + radius*sin(beta)*sin(alpha);   
       
 //    spherical lesion
-      sourcex = posphantomx + radius*cos(beta);
-      sourcey = (posphantomy + radius*sin(beta)*cos(alpha))*cosdelta - (posphantomz + radius*sin(beta)*sin(alpha))*sendelta;
-      sourcez = (posphantomy + radius*sin(beta)*cos(alpha))*sendelta + (posphantomz + radius*sin(beta)*sin(alpha))*cosdelta;   
+//    sourcex = posphantomx + radius*cos(beta);
+//    sourcey = (posphantomy + radius*sin(beta)*cos(alpha))*cosdelta - (posphantomz + radius*sin(beta)*sin(alpha))*sendelta;
+//    sourcez = (posphantomy + radius*sin(beta)*cos(alpha))*sendelta + (posphantomz + radius*sin(beta)*sin(alpha))*cosdelta;   
       
 //    breast and lesion source  - first hypotheses
 //    if (prob > 0.9)
