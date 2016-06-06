@@ -152,17 +152,17 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   
      //cylindrical source constants
-     double alpha = G4UniformRand()*2*CLHEP::pi;
-     double ranradius = sqrt(G4UniformRand());
+     //double alpha = G4UniformRand()*2*CLHEP::pi;
+     //double ranradius = sqrt(G4UniformRand());
      //double radius = ranradius*104.54;
-     double radius = ranradius*124.5;
+     //double radius = ranradius*124.5;
      
      //spherical source constants
-//     double alpha = G4UniformRand()*2*CLHEP::pi;
-//     double ran = G4UniformRand();
-//     double beta = acos(2*ran-1);
-//     double ranradius = cbrt(G4UniformRand());
-//     double radius = ranradius*124.5;
+     double alpha = G4UniformRand()*2*CLHEP::pi;
+     double ran = G4UniformRand();
+     double beta = acos(2*ran-1);
+     double ranradius = cbrt(G4UniformRand());
+     double radius = ranradius*10;
 //     double ranRlesion = cbrt(G4UniformRand());
 //     double Rlesion = ranRlesion*10;
 //     double prob = G4UniformRand();
@@ -200,14 +200,14 @@ void normalizationPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       //G4cout << "Phi = " << phi << G4endl;
       
 //    cylindrical source rotated
-    sourcey = radius*sin(alpha);
-    sourcez = radius*cos(alpha);
-    sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;  
+//    sourcey = radius*sin(alpha);
+//    sourcez = radius*cos(alpha);
+//    sourcex = (G4UniformRand() * phantomx) - ( phantomx/2.0) + posphantomx;  
       
 //    spherical source
-//    sourcex = posphantomx + radius*cos(beta);
-//    sourcey = posphantomy + radius*sin(beta)*cos(alpha);
-//    sourcez = posphantomz + radius*sin(beta)*sin(alpha);   
+    sourcex = posphantomx + radius*cos(beta);
+    sourcey = posphantomy + radius*sin(beta)*cos(alpha);
+    sourcez = posphantomz + radius*sin(beta)*sin(alpha);   
       
 //    spherical lesion
 //    sourcex = posphantomx + radius*cos(beta);
